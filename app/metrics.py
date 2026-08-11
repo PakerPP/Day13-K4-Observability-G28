@@ -35,7 +35,14 @@ def percentile(values: list[int], p: int) -> float:
     idx = max(0, min(len(items) - 1, round((p / 100) * len(items) + 0.5) - 1))
     return float(items[idx])
 
+def calculate_error_rate_pct() -> float:
+    error_count = sum(ERRORS.values())
+    total_requests = TRAFFIC + error_count
 
+    if total_requests == 0:
+        return 0.0
+
+    return round(error_count / total_requests * 100, 2)
 
 def snapshot() -> dict:
     total_errors = sum(ERRORS.values())
@@ -53,5 +60,6 @@ def snapshot() -> dict:
         "tokens_out_total": sum(REQUEST_TOKENS_OUT),
         "error_rate_pct": round(error_rate, 2),  # ← Thêm trường này
         "error_breakdown": dict(ERRORS),
+        "error_rate_pct": calculate_error_rate_pct(),
         "quality_avg": round(mean(QUALITY_SCORES), 4) if QUALITY_SCORES else 0.0,
     }
