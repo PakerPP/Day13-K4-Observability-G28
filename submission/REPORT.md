@@ -4,7 +4,7 @@
 
 - Tên nhóm: G28
 - Repository URL: https://github.com/PakerPP/Day13-K4-Observability-G28
-- Commit SHA cuối: sẽ cập nhật sau commit/push cuối cùng của `submission/REPORT.md` và evidence.
+- Commit SHA cuối: `37a5b90de201c7a5b941b8827f6c71cdc804f239`
 - Thành viên và vai trò:
   - Trần Trung Kiên - Thành viên A (API & Middleware)
   - Nguyễn Trung Hiếu - Thành viên B (Security Engineer)
