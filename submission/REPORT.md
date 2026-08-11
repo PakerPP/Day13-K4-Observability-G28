@@ -92,5 +92,6 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 |---|---|---|---|
 | Trần Trung Kiên | Thành viên A (API & Middleware) | https://github.com/PakerPP/Day13-K4-Observability-G28/commit/0f6af13dfae720f2ee14c802cdeeea621fc6b7b9 | Cấu hình CorrelationIdMiddleware, xử lý PII Scrubbing, Log Enrichment |
 | Nguyễn Trung Hiếu | Thành viên B (Security Engineer) |  | Đã chạy baseline score |
+| Đặng Ngọc Anh | Thành viên D (SRE & Alerts Engineer) | https://github.com/PakerPP/Day13-K4-Observability-G28/commit/a542151, https://github.com/PakerPP/Day13-K4-Observability-G28/commit/8238930, https://github.com/PakerPP/Day13-K4-Observability-G28/commit/e61f534 | Thiết kế SLO (`config/slo.yaml`) đối chiếu số với threshold dashboard; viết 3 alert symptom-based + runbook 8 trường (`config/alert_rules.yaml`, `docs/alerts.md`); tự viết validator `scripts/validate_alerts.py` để tự động phát hiện lệch số SLO↔dashboard và alert dựa tên incident nội bộ; hoàn thiện phần Prompt versioning (v1/v2, label, rollback qua Langfuse API) và điều tra challenge chính thức `rag_slow` (Metrics→Trace→Log→Root cause) khi CP2/CP3 còn thiếu bằng chứng |
 
 
