@@ -36,14 +36,20 @@
 ```
 ## 4. Prompt versioning
 
-- Prompt name:
-- Version/label baseline:
-- Version/label candidate:
+- Prompt name: `day13-chat` (text prompt, giữ 3 biến `{{feature}}`, `{{docs}}`, `{{message}}`)
+- Version/label baseline: version 1, labels `baseline` + `production` — nội dung `Feature={{feature}}\nDocs={{docs}}\nQuestion={{message}}`
+- Version/label candidate: version 2, label `candidate` — thêm câu chỉ dẫn "Answer concisely in at most 3 sentences." vào cuối template
 - Trace ID của mỗi version:
-- Bằng chứng đổi label hoặc rollback:
+  - `LANGFUSE_PROMPT_LABEL=baseline` (version 1) → trace `8d7578b5f23376661318a351047fa6c6`, metadata `prompt_label=baseline`, `prompt_version=1`, `prompt_source=langfuse`
+  - `LANGFUSE_PROMPT_LABEL=candidate` (version 2) → trace `97d73126cd8bb61833166559fb531acb`, metadata `prompt_label=candidate`, `prompt_version=2`, `prompt_source=langfuse`
+- Bằng chứng đổi label hoặc rollback (xác nhận qua Langfuse API, không chỉ log local):
+  1. Đổi `production` từ version 1 sang version 2: trace `4f856cc895f981d1023d89c1a72a4be5` (`LANGFUSE_PROMPT_LABEL=production`) có metadata `prompt_version=2`.
+  2. Rollback `production` từ version 2 về version 1: trace `1bf1b9e125e8958b8d63812a214282ab` (`LANGFUSE_PROMPT_LABEL=production`) có metadata `prompt_version=1`.
+  3. Trạng thái label cuối cùng: `production` → version 1 (labels `['baseline', 'production']`), `candidate` vẫn trỏ version 2, xác nhận bằng `client.get_prompt('day13-chat', label='production').version == 1`.
 
 ## 5. Dashboard, SLO và alerts
 
+- Kết quả `validate_dashboard.py`: HỢP LỆ: 6/6 panel có trong dashboard contract. (chi tiết: `submission/evidence/validate_dashboard_result.txt`)
 - Evidence dashboard:
   - `submission/evidence/dashboard-baseline.png`: dashboard baseline có đủ 6 nhóm chỉ số.
   - `submission/evidence/dashboard-rag-slow.png`: incident `rag_slow` làm P95 tăng lên 3,763 ms, vượt threshold 3,000 ms.
