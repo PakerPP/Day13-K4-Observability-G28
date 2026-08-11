@@ -1,0 +1,14 @@
+Langfuse connection check - 2026-08-11
+
+Configuration verification:
+- LANGFUSE_PUBLIC_KEY configured: true
+- LANGFUSE_SECRET_KEY configured: true
+- Host: https://cloud.langfuse.com/
+- SDK auth_check(): True
+
+Load test:
+- Command: .\.venv\Scripts\python.exe scripts\load_test.py
+- Result: 10/10 requests returned HTTP 200.
+- The API was restarted after key configuration so the Langfuse SDK loaded the credentials.
+
+No keys or request payloads are included in this evidence file.
