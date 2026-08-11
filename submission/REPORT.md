@@ -10,7 +10,7 @@
 ## 2. Kết quả kỹ thuật
 
 - Điểm `validate_logs.py`: 100/100 (baseline ban đầu 30/100 trước khi hoàn thiện middleware/PII/log enrichment)
-- Tổng số traces: 10
+- Tổng số traces: 19
 - Số PII leak còn lại: 0
 - Link/đường dẫn dashboard: https://cloud.langfuse.com/project/cmsod0gjn02ctad0dqtnilg3g/dashboards
 
