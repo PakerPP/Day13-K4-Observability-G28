@@ -17,7 +17,7 @@
 - Điểm `validate_logs.py`: 100/100
 - Tổng số traces: 19
 - Số PII leak còn lại: 0
-- Link/đường dẫn dashboard: https://cloud.langfuse.com/project/cmsod0gjn02ctad0dqtnilg3g/dashboards
+- Link/đường dẫn dashboard: `dashboard.html` (chạy local tại `http://127.0.0.1:8501/dashboard.html`)
 
 ## 3. Logging và tracing
 
@@ -44,8 +44,11 @@
 
 ## 5. Dashboard, SLO và alerts
 
-- Kết quả `validate_dashboard.py`:
+- Kết quả `validate_dashboard.py`: HỢP LỆ: 6/6 panel có trong dashboard contract.
 - Evidence dashboard:
+  - `submission/evidence/dashboard-baseline.png`: dashboard baseline có đủ 6 nhóm chỉ số.
+  - `submission/evidence/dashboard-rag-slow.png`: incident `rag_slow` làm P95 tăng lên 3,763 ms, vượt threshold 3,000 ms.
+  - `submission/evidence/dashboard-tool-fail.png`: incident `tool_fail` cho error rate 25.00% và breakdown `RuntimeError: 10`.
 - SLO đã chọn và lý do:
 - Alert rules và runbook:
 
