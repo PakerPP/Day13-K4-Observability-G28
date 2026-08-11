@@ -69,13 +69,20 @@
 
 ## 6. Điều tra challenge
 
-- Challenge ID:
-- Triệu chứng từ metrics:
-- Trace ID liên quan:
-- Log line/correlation ID liên quan:
-- Root cause:
-- Fix action:
+- Challenge ID: `day13-k4-observability-v1` (cohort K4, incident chính thức `rag_slow`, seed 1304, `affected_feature=monitoring`, `latency_threshold_ms=2000`)
+- Triệu chứng từ metrics: Chạy `POST /incidents/rag_slow/enable` rồi gửi 5 query chính thức từ `config/challenge.json` với `concurrency=5` (đúng thứ tự shuffle theo seed 1304). `GET /metrics` trước incident: `latency_p95=0.0`. Sau khi chạy: `latency_p95=2659ms`, `latency_p50=2651ms` — vượt hẳn `latency_threshold_ms=2000` của challenge và áp sát ngưỡng SLO `latency_p95_ms ≤ 3000` (`config/slo.yaml`).
+- Trace ID liên quan: Langfuse trace `cadcfe5c5a3963b33a92c5421a5d8453` (session `k4-challenge-s01`), observation/generation `fe58a0ce408f91cb`, latency đo được tại span = 2.651s — chiếm gần như toàn bộ latency của request.
+- Log line/correlation ID liên quan: `correlation_id=req-ac645aff` trong `data/logs.jsonl`:
+  ```json
+  {"service": "api", "latency_ms": 2651, "tokens_in": 35, "tokens_out": 168, "cost_usd": 0.002625, "quality_score": 0.8, "event": "response_sent", "session_id": "k4-challenge-s01", "feature": "monitoring", "correlation_id": "req-ac645aff", "user_id_hash": "f00ba60b3772", "ts": "2026-08-11T10:34:13.623961Z"}
+  ```
+  Cả 5 request trong đợt chạy chính thức đều có `latency_ms` trong khoảng 2651–2659ms, khớp nhất quán với triệu chứng ở metrics và trace.
+- Root cause: `app/mock_rag.py:18` — hàm `retrieve()` gọi `time.sleep(2.5)` khi `STATE["rag_slow"]` bật, mô phỏng bước truy vấn vector store bị chậm. Vì `LabAgent.run()` gọi `retrieve()` trước khi gọi LLM, toàn bộ 2.5s này cộng dồn vào latency tổng của request và được ghi nhận nguyên vẹn trong `response_sent.latency_ms` cũng như trong latency của Langfuse generation span.
+- Fix action: Tắt incident bằng `POST /incidents/rag_slow/disable` (đã xác nhận qua log `incident_disabled`, `metrics.latency_p95` trở lại ~0 ngay sau đó vì server restart). Ở production, hướng fix tương ứng là thêm timeout ngắn cho bước retrieval (ví dụ 1s) kèm circuit breaker, để một vector store chậm không kéo toàn bộ request vượt SLO — đúng như mitigation đã ghi trong `docs/alerts.md#alert-1`.
 - Preventive measure:
+  1. Alert `HighLatencyP95` (`config/alert_rules.yaml`) sẽ bắt được triệu chứng này trong thực tế (`latency_p95_ms > 3000 for 5m`); với `rag_slow` chạy liên tục trên tải thật, P95 vượt xa ngưỡng này.
+  2. Bổ sung timeout/circuit breaker cho `retrieve()` để giới hạn phần đóng góp tối đa của bước RAG vào latency tổng.
+  3. Phát hiện phụ trong lúc điều tra: khi chạy 5 request đồng thời qua `ThreadPoolExecutor`, `correlation_id` trong metadata trace Langfuse (lấy từ `structlog.contextvars` tại `app/agent.py:39`) không khớp với `correlation_id` thật trong log JSONL của cùng session (ví dụ trace metadata ghi `req-025ef959` nhưng log ghi `req-ac645aff` cho session `k4-challenge-s01`) — dấu hiệu context bị chia sẻ giữa các thread khi nhiều request async chạy song song. Không ảnh hưởng tới kết luận root cause của challenge này (vẫn đối chiếu đúng bằng `session_id` và giá trị `latency_ms`), nhưng nên được nhóm sửa (ví dụ đọc `correlation_id` từ `request.state` truyền tường minh qua thay vì qua contextvars) trước khi dùng correlation_id trong trace metadata làm bằng chứng chính cho các điều tra sau này.
 
 ## 7. Đóng góp cá nhân
 
