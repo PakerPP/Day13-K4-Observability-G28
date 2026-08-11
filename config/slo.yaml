@@ -4,13 +4,30 @@ slis:
   latency_p95_ms:
     objective: 3000
     target: 99.5
-    note: Replace with your group's target
+    note: >
+      Baseline p95 do fake LLM la ~1214ms (data/logs.jsonl, 20 request, khong
+      incident). Objective 3000ms giu bien do ~2.5x baseline de chiu duoc tai
+      cao va latency runbook cua rag_slow (them ~2500ms/request) ma khong bao
+      dong lien tuc; khop threshold panel latency trong config/dashboard.yaml.
   error_rate_pct:
     objective: 2
     target: 99.0
+    note: >
+      Baseline hien tai la 0% loi (chua incident). Objective 2% phan anh muc
+      chiu loi cua mot API demo dung fake LLM/RAG, khop threshold panel errors
+      trong config/dashboard.yaml.
   daily_cost_usd:
     objective: 2.5
     target: 100.0
+    note: >
+      Baseline trung binh ~0.002 USD/request; voi tai load test thuc te trong
+      buoi lab, tong chi phi du kien duoi 2.5 USD/cua so 60 phut. Objective
+      dat sat tran de bat duoc cost_spike (x4 output token) ma khong qua
+      chat voi tai practice binh thuong; khop threshold panel cost.
   quality_score_avg:
     objective: 0.75
     target: 95.0
+    note: >
+      Baseline quality_score trung binh la 0.88 (heuristic trong app/agent.py).
+      Objective 0.75 de mot phan cau tra loi bi PII redact hoac thieu doc RAG
+      van nam trong nguong chap nhan duoc; khop threshold panel quality.

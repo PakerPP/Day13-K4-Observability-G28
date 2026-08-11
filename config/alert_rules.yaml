@@ -1,19 +1,21 @@
 alerts:
-  - name: TODO_alert_1
-    severity: TODO
-    condition: TODO
+  - name: HighLatencyP95
+    severity: critical
+    condition: latency_p95_ms > 3000 for 5m
     type: symptom-based
-    owner: TODO
+    owner: SRE-on-call (Thanh vien D)
     runbook: docs/alerts.md#alert-1
-  - name: TODO_alert_2
-    severity: TODO
-    condition: TODO
+
+  - name: ElevatedErrorRate
+    severity: critical
+    condition: error_rate_pct > 2 for 5m
     type: symptom-based
-    owner: TODO
+    owner: API-on-call (Thanh vien A)
     runbook: docs/alerts.md#alert-2
-  - name: TODO_alert_3
-    severity: TODO
-    condition: TODO
+
+  - name: QualityScoreDegraded
+    severity: warning
+    condition: quality_score_avg < 0.75 for 15m
     type: symptom-based
-    owner: TODO
+    owner: SRE-on-call (Thanh vien D)
     runbook: docs/alerts.md#alert-3
