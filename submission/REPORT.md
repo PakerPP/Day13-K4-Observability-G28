@@ -92,5 +92,5 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 |---|---|---|---|
 | Trần Trung Kiên | Thành viên A (API & Middleware) | https://github.com/PakerPP/Day13-K4-Observability-G28/commit/0f6af13dfae720f2ee14c802cdeeea621fc6b7b9 | Cấu hình CorrelationIdMiddleware, xử lý PII Scrubbing, Log Enrichment |
 | Nguyễn Trung Hiếu | Thành viên B (Security Engineer) |  | Đã chạy baseline score |
-
+| Nguyễn Quang Sơn | Thành viên C (Metrics & Dashboard): triển khai `error_rate_pct`, bổ sung unit test, thiết kế dashboard HTML 6 nhóm chỉ số và thu thập evidence baseline/`rag_slow`/`tool_fail`. | [63c2977](https://github.com/PakerPP/Day13-K4-Observability-G28/commit/63c2977) · [18c8bbb](https://github.com/PakerPP/Day13-K4-Observability-G28/commit/18c8bbb) | Cách tính error rate từ request thành công/lỗi, thiết kế dashboard theo log contract, và dùng metrics để xác nhận latency/error khi xảy ra incident. |
 
